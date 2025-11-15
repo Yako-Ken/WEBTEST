@@ -11,7 +11,7 @@ function ProductList() {
         <Image src="https://images.pexels.com/photos/34627919/pexels-photo-34627919.jpeg" alt="" fill sizes='25vw' className='absolute object-cover rounded-md' />
       </div>
       <div className="flex justify-between">
-        <span className='font-medium'>Product Name</span>
+        <span className='font-medium'>Product Name1</span>
         <span className='font-semibold'>E49</span>
       </div>
       <div className="text-sm text-gray-500">My description</div>
@@ -20,11 +20,11 @@ function ProductList() {
        <Link href="/test" className='w-full flex flex-col gap-4 sm:w-[45%] lg:w-[22%]'>
       <div className="relative w-full h-80">
         <Image src="https://images.pexels.com/photos/32614532/pexels-photo-32614532.jpeg" alt="" fill sizes='25vw' className='absolute object-cover rounded-md z-10 hover:opacity-0 transition-opacity easy duration-500' />
-        <Image src="https://images.pexels.com/photos/34627921/pexels-photo-34627921.jpeg" alt="" fill sizes='25vw' className='absolute object-cover rounded-md' />
+        <Image src="https://images.pexels.com/photos/34627922/pexels-photo-34627922.jpeg" alt="" fill sizes='25vw' className='absolute object-cover rounded-md' />
       </div>
       <div className="flex justify-between">
-        <span className='font-medium'>Product Name</span>
-        <span className='font-semibold'>E49</span>
+        <span className='font-medium'>Product Name2</span>
+        <span className='font-semibold'>E364</span>
       </div>
       <div className="text-sm text-gray-500">My description</div>
       <button className='rounded-2xl ring-1 ring-importantcolor w-max text-importantcolor py-2 px-4 text-sm hover:bg-importantcolor hover:text-white'>Add To Cart</button>
@@ -35,8 +35,8 @@ function ProductList() {
         <Image src="https://images.pexels.com/photos/34627923/pexels-photo-34627923.jpeg" alt="" fill sizes='25vw' className='absolute object-cover rounded-md' />
       </div>
       <div className="flex justify-between">
-        <span className='font-medium'>Product Name</span>
-        <span className='font-semibold'>E49</span>
+        <span className='font-medium'>Product Name3</span>
+        <span className='font-semibold'>E492</span>
       </div>
       <div className="text-sm text-gray-500">My description</div>
       <button className='rounded-2xl ring-1 ring-importantcolor w-max text-importantcolor py-2 px-4 text-sm hover:bg-importantcolor hover:text-white'>Add To Cart</button>
@@ -47,8 +47,8 @@ function ProductList() {
         <Image src="https://images.pexels.com/photos/34627925/pexels-photo-34627925.jpeg" alt="" fill sizes='25vw' className='absolute object-cover rounded-md' />
       </div>
       <div className="flex justify-between">
-        <span className='font-medium'>Product Name</span>
-        <span className='font-semibold'>E49</span>
+        <span className='font-medium'>Product Name4</span>
+        <span className='font-semibold'>E949</span>
       </div>
       <div className="text-sm text-gray-500">My description</div>
       <button className='rounded-2xl ring-1 ring-importantcolor w-max text-importantcolor py-2 px-4 text-sm hover:bg-importantcolor hover:text-white'>Add To Cart</button>
