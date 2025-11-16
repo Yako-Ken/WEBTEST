@@ -1,78 +1,110 @@
 "use client"
-import Image from 'next/image';
-import Link from 'next/link';
-import React, { useEffect, useState } from 'react'
+import Image from "next/image";
+import Link from "next/link";
+import React, { useRef, useEffect, useState } from "react";
 
-function Slider() {
+function CategoryList() {
+  const slides = [
+    { src: "https://images.pexels.com/photos/34627919/pexels-photo-34627919.jpeg", title: "Category 1" },
+    { src: "https://images.pexels.com/photos/34612912/pexels-photo-34612912.jpeg", title: "Category 2" },
+    { src: "https://images.pexels.com/photos/34627917/pexels-photo-34627917.jpeg", title: "Category 3" },
+    { src: "https://images.pexels.com/photos/34627913/pexels-photo-34627913.jpeg", title: "Category 4" },
+  ];
 
-    const slides = [
-  {
-    id: 1,
-    title: "Summer Sale Collections",
-    description: "Sale! Up to 50% off!",
-    img: "https://images.pexels.com/photos/1926769/pexels-photo-1926769.jpeg?auto=compress&cs=tinysrgb&w=800",
-    url: "/",
-    bg: "bg-gradient-to-r from-yellow-50 to-pink-50",
-  },
-  {
-    id: 2,
-    title: "Winter Sale Collections",
-    description: "Sale! Up to 50% off!",
-    img: "https://images.pexels.com/photos/1021693/pexels-photo-1021693.jpeg?auto=compress&cs=tinysrgb&w=800",
-    url: "/",
-    bg: "bg-gradient-to-r from-pink-50 to-blue-50",
-  },    
-  {
-    id: 3,
-    title: "Spring Sale Collections",
-    description: "Sale! Up to 50% off!",
-    img: "https://images.pexels.com/photos/1183266/pexels-photo-1183266.jpeg?auto=compress&cs=tinysrgb&w=800",
-    url: "/",
-    bg: "bg-gradient-to-r from-blue-50 to-yellow-50",
-  },
-];
-    const [current,setcurrent]=useState(0);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [isMobile, setIsMobile] = useState(false);
+  const speed = 1; // pixels per frame for desktop continuous
 
-    useEffect(()=>{
-        const interval = setInterval(()=>{
-            setcurrent(prev=>(prev === slides.length-1 ? 0 : prev+1))
-        },3000)
-        return ()=>clearInterval(interval);
-    },[]);
+  // تحقق من حجم الشاشة
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth < 768);
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  // Desktop Continuous Scroll
+  useEffect(() => {
+    if (isMobile) return; // لا تعمل على الموبايل
+
+    const container = containerRef.current;
+    if (!container) return;
+
+    let requestId: number;
+    let offset = 0;
+
+    const animate = () => {
+      offset -= speed;
+      if (container.scrollWidth / 2 <= -offset) offset = 0;
+      container.style.transform = `translateX(${offset}px)`;
+      requestId = requestAnimationFrame(animate);
+    };
+
+    animate();
+
+    const handleMouseEnter = () => cancelAnimationFrame(requestId);
+    const handleMouseLeave = () => animate();
+
+    container.addEventListener("mouseenter", handleMouseEnter);
+    container.addEventListener("mouseleave", handleMouseLeave);
+
+    return () => {
+      cancelAnimationFrame(requestId);
+      container.removeEventListener("mouseenter", handleMouseEnter);
+      container.removeEventListener("mouseleave", handleMouseLeave);
+    };
+  }, [isMobile]);
+
+  // Mobile Autoplay Slider
+  const [currentIndex, setCurrentIndex] = useState(0);
+  useEffect(() => {
+    if (!isMobile) return;
+
+    const interval = setInterval(() => {
+      setCurrentIndex((prev) => (prev + 1) % slides.length);
+    }, 5000);
+
+    return () => clearInterval(interval);
+  }, [isMobile]);
 
   return (
-    <div className='h-[calc(100vh-80px)] overflow-hidden'>
-      <div className="w-max h-full flex transition-all ease-in-out duration-1000"
-      style={{transform:`translateX(-${current * 100}vw)`}}>
-        {slides.map(slide=>(
-            <div className={`${slide.bg} w-screen h-full flex flex-col gap-16 xl:flex-row`} key={slide.id}>
-                {/* Text CONTAINER */}
-                <div className="h-1/2 xl:w-1/2 xl:h-full flex flex-col items-center justify-center gap-8 2xl:gap-12 text-center">
-                <h2 className='text-xl lg:text-3xl 2xl:text-5xl'>{slide.description}</h2>
-                <h1 className='text-5xl lg:text-6xl 2xl:text-8xl font-semibold'>{slide.title}</h1>
-                <Link href={slide.url}>
-                <button className="rounded-md bg-black text-white py-3 px-4">SHOP NOW</button>
-                </Link>
-                </div>
-                {/* IMAGE CONTAINER */}
-                <div className="h-1/2 xl:h-full xl:w-1/2 relative">
-                <Image src={slide.img} alt='' fill sizes='100%' className='object-cover' />
-                </div>
+    <div className="overflow-hidden relative mt-8">
+      {/* Desktop Continuous Slider */}
+      {!isMobile && (
+        <div
+          ref={containerRef}
+          className="flex gap-4 whitespace-nowrap will-change-transform scrollbar-hide"
+        >
+          {[...slides, ...slides].map((slide, i) => (
+            <Link key={i} href="/list?cat=test" className="flex-shrink-0 w-1/4 inline-block hover:scale-[1.01]">
+              <div className="relative bg-slate-100 w-full h-96">
+                <Image src={slide.src} alt="" fill sizes="20vw" className="object-cover rounded-md" />
+              </div>
+              <h1 className="mt-4 font-light text-xl tracking-wide">{slide.title}</h1>
+            </Link>
+          ))}
+        </div>
+      )}
+
+      {/* Mobile Autoplay */}
+      {isMobile && (
+        <div className="relative w-full px-4">
+          <Link href="/list?cat=test" className="block w-full">
+            <div className="relative bg-slate-100 w-full h-96">
+              <Image
+                src={slides[currentIndex].src}
+                alt=""
+                fill
+                sizes="100vw"
+                className="object-cover"
+              />
             </div>
-        ))}
-        {/* SLIDE SKIP */}
-      </div>
-      <div className='absolute m-auto left-1/2 bottom-8 flex gap-4'>
-      {
-          slides.map((slide,index) => (
-              <div  key={slide.id} onClick={()=>setcurrent(index)} className={`w-3 h-3 rounded-full ring-1 ring-gray-600 cursor-pointer flex items-center justify-center ${current === index ? "scale-150" : "" }`}>
-                {current === index && (<div className='w-[6px] h-[6px] bg-gray-600 rounded-full'></div>)}
-            </div>
-        ))
-    }
+            <h1 className="mt-4 font-light text-xl tracking-wide">{slides[currentIndex].title}</h1>
+          </Link>
+        </div>
+      )}
     </div>
-    </div>
-  )
+  );
 }
 
-export default Slider
+export default CategoryList;
